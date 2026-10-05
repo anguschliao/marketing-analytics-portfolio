@@ -31,4 +31,8 @@ if __name__ == "__main__":
 
     df = run_query(sys.argv[1])
 
-    print(df.to_string(index=False))
+    print("\nPreview:")
+    print(df.head(20).to_string(index=False))
+
+    print(f"\nRows: {len(df):,}")
+    print(f"Columns: {len(df.columns)}")
