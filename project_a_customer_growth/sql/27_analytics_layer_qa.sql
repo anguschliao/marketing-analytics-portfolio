@@ -12,10 +12,15 @@
 --   3. customer_type_performance
 --   4. session_funnel
 --
--- Note:
--- session_funnel uses a nested progression definition, so its
--- final purchase count is intentionally different from the
--- overall purchasing-session KPI.
+-- Measurement note:
+-- session_funnel represents observed participation at reliably
+-- instrumented ecommerce stages. It does not require every
+-- preceding stage to have been observed.
+--
+-- Add to Cart is excluded from the primary session_funnel
+-- because instrumentation QA identified incomplete coverage.
+-- It remains reconciled across the other analytical tables as
+-- a diagnostic event metric.
 -- ============================================================
 
 WITH base AS (
@@ -26,6 +31,7 @@ WITH base AS (
         COUNTIF(product_views > 0) AS product_view_sessions,
         COUNTIF(add_to_cart_events > 0) AS add_to_cart_sessions,
         COUNTIF(checkout_events > 0) AS checkout_sessions,
+        COUNTIF(payment_events > 0) AS payment_sessions,
         COUNTIF(purchase_events > 0) AS purchasing_sessions,
         SUM(revenue) AS revenue
 
@@ -81,11 +87,20 @@ customer_type AS (
 funnel AS (
 
     SELECT
-        MAX(IF(stage = 'Session', sessions, NULL)) AS funnel_sessions,
-        MAX(IF(stage = 'Product View', sessions, NULL)) AS funnel_product_views,
-        MAX(IF(stage = 'Add to Cart', sessions, NULL)) AS funnel_add_to_cart,
-        MAX(IF(stage = 'Begin Checkout', sessions, NULL)) AS funnel_checkout,
-        MAX(IF(stage = 'Purchase', sessions, NULL)) AS funnel_purchases
+        MAX(IF(stage = 'Session', sessions, NULL))
+            AS funnel_sessions,
+
+        MAX(IF(stage = 'Product View', sessions, NULL))
+            AS funnel_product_views,
+
+        MAX(IF(stage = 'Begin Checkout', sessions, NULL))
+            AS funnel_checkout,
+
+        MAX(IF(stage = 'Payment Info', sessions, NULL))
+            AS funnel_payment,
+
+        MAX(IF(stage = 'Purchase', sessions, NULL))
+            AS funnel_purchases
 
     FROM
         `turing-emitter-510722-h2.analytics.session_funnel`
@@ -94,6 +109,7 @@ funnel AS (
 SELECT
     base.sessions AS session_base_sessions,
 
+    -- Core table reconciliation
     daily.sessions - base.sessions
         AS daily_sessions_diff,
 
@@ -130,26 +146,31 @@ SELECT
     customer_type.revenue - base.revenue
         AS customer_type_revenue_diff,
 
+    -- Primary observed funnel reconciliation
     funnel.funnel_sessions - base.sessions
         AS funnel_session_diff,
 
     funnel.funnel_product_views - base.product_view_sessions
         AS funnel_product_view_diff,
 
-    funnel.funnel_add_to_cart - base.add_to_cart_sessions
-        AS funnel_add_to_cart_diff,
-
     funnel.funnel_checkout - base.checkout_sessions
         AS funnel_checkout_diff,
 
-    base.purchasing_sessions
-        AS all_purchasing_sessions,
+    funnel.funnel_payment - base.payment_sessions
+        AS funnel_payment_diff,
 
-    funnel.funnel_purchases
-        AS nested_funnel_purchases,
+    funnel.funnel_purchases - base.purchasing_sessions
+        AS funnel_purchase_diff,
 
-    base.purchasing_sessions - funnel.funnel_purchases
-        AS purchases_outside_complete_funnel
+    -- Add to Cart diagnostic reconciliation
+    daily.add_to_cart_sessions - base.add_to_cart_sessions
+        AS daily_add_to_cart_diff,
+
+    channel.add_to_cart_sessions - base.add_to_cart_sessions
+        AS channel_add_to_cart_diff,
+
+    customer_type.add_to_cart_sessions - base.add_to_cart_sessions
+        AS customer_type_add_to_cart_diff
 
 FROM
     base,

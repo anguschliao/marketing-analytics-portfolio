@@ -1,9 +1,17 @@
 -- Project A: Customer & Growth Analytics
--- Conversion funnel analysis
+-- Observed ecommerce funnel analysis
 --
 -- Purpose:
--- Measure progression through the sequential ecommerce funnel
--- and identify the stages with the greatest customer drop-off.
+-- Compare participation across reliably instrumented ecommerce
+-- stages and identify the largest observed-stage gaps.
+--
+-- Measurement note:
+-- Funnel stages represent independently observed event
+-- participation and do not enforce chronological progression.
+--
+-- Add to Cart is excluded because instrumentation QA identified
+-- incomplete event coverage. It remains available separately
+-- as a diagnostic metric.
 
 SELECT
     stage_order,

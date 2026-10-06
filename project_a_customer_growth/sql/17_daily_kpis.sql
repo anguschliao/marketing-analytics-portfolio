@@ -11,6 +11,19 @@
 -- Purpose:
 -- Provide core daily marketing and ecommerce KPIs for
 -- trend analysis, reporting, and Power BI.
+--
+-- Measurement note:
+-- Ecommerce stage metrics represent independent observed event
+-- participation within a session. They are not nested or
+-- sequential funnel stages.
+--
+-- Add to Cart has known incomplete instrumentation and is
+-- retained as a diagnostic metric rather than a definitive
+-- funnel-abandonment stage.
+--
+-- Purchase metrics use all sessions with an observed purchase
+-- event and are not restricted to sessions containing a
+-- complete recorded ecommerce path.
 -- ============================================================
 
 SELECT
@@ -28,13 +41,16 @@ SELECT
         COUNT(*)
     ) AS engagement_rate,
 
-    -- Ecommerce funnel
+    -- Observed ecommerce stage participation
+    -- Each metric independently measures whether the event
+    -- was observed within the session.
     COUNTIF(product_views > 0) AS product_view_sessions,
     COUNTIF(add_to_cart_events > 0) AS add_to_cart_sessions,
     COUNTIF(checkout_events > 0) AS checkout_sessions,
     COUNTIF(purchase_events > 0) AS purchasing_sessions,
 
     -- Conversion
+    -- Based on all observed purchasing sessions.
     SAFE_DIVIDE(
         COUNTIF(purchase_events > 0),
         COUNT(*)

@@ -9,8 +9,23 @@
 -- analytics.session_base
 --
 -- Purpose:
--- Compare acquisition traffic quality, funnel performance,
--- conversion, and revenue across observed session channels.
+-- Compare acquisition traffic quality, observed ecommerce
+-- stage participation, conversion, and revenue across
+-- session channels.
+--
+-- Measurement note:
+-- Ecommerce stage metrics represent independent observed event
+-- participation within a session. They are not nested or
+-- sequential funnel stages.
+--
+-- Add to Cart has known incomplete instrumentation and is
+-- retained as a diagnostic channel metric. Differences in
+-- Add to Cart rate should not be interpreted as definitive
+-- differences in cart abandonment.
+--
+-- Purchase metrics use all sessions with an observed purchase
+-- event and are not restricted to sessions containing a
+-- complete recorded ecommerce path.
 -- ============================================================
 
 SELECT
@@ -37,7 +52,7 @@ SELECT
         COUNT(*)
     ) AS engagement_rate,
 
-    -- Product view
+    -- Observed product view participation
     COUNTIF(product_views > 0)
         AS product_view_sessions,
 
@@ -46,7 +61,8 @@ SELECT
         COUNT(*)
     ) AS product_view_rate,
 
-    -- Add to cart
+    -- Observed Add to Cart participation
+    -- Known incomplete instrumentation; diagnostic only.
     COUNTIF(add_to_cart_events > 0)
         AS add_to_cart_sessions,
 
@@ -55,7 +71,7 @@ SELECT
         COUNT(*)
     ) AS add_to_cart_rate,
 
-    -- Checkout
+    -- Observed checkout participation
     COUNTIF(checkout_events > 0)
         AS checkout_sessions,
 
@@ -65,6 +81,7 @@ SELECT
     ) AS checkout_rate,
 
     -- Purchase
+    -- Includes all sessions with an observed purchase event.
     COUNTIF(purchase_events > 0)
         AS purchasing_sessions,
 

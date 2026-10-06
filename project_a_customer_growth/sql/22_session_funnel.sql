@@ -1,6 +1,6 @@
 -- ============================================================
 -- Project A: Customer & Growth Analytics
--- Nested Ecommerce Funnel
+-- Observed Ecommerce Funnel
 --
 -- Grain:
 -- One row per funnel stage
@@ -9,13 +9,20 @@
 -- analytics.session_base
 --
 -- Purpose:
--- Measure progression through a nested ecommerce funnel.
--- Each downstream stage requires the session to have reached
--- all preceding stages.
+-- Measure observed participation at reliably instrumented
+-- ecommerce stages.
+--
+-- Measurement decision:
+-- Add to Cart is excluded from the primary funnel because QA
+-- identified incomplete instrumentation. It remains available
+-- in session_base and other analytical tables as a diagnostic
+-- metric, but should not be interpreted as a definitive
+-- abandonment stage.
 --
 -- Note:
--- This validates event presence within the same session.
--- It does not enforce chronological event order.
+-- Stages represent event presence within the same session.
+-- This table does not enforce chronological event order or
+-- require every preceding stage to have been observed.
 -- ============================================================
 
 WITH funnel_counts AS (
@@ -28,38 +35,15 @@ WITH funnel_counts AS (
         ) AS product_view_sessions,
 
         COUNTIF(
-            product_views > 0
-            AND add_to_cart_events > 0
-        ) AS add_to_cart_sessions,
-
-        COUNTIF(
-            product_views > 0
-            AND add_to_cart_events > 0
-            AND checkout_events > 0
+            checkout_events > 0
         ) AS checkout_sessions,
 
         COUNTIF(
-            product_views > 0
-            AND add_to_cart_events > 0
-            AND checkout_events > 0
-            AND shipping_events > 0
-        ) AS shipping_sessions,
-
-        COUNTIF(
-            product_views > 0
-            AND add_to_cart_events > 0
-            AND checkout_events > 0
-            AND shipping_events > 0
-            AND payment_events > 0
+            payment_events > 0
         ) AS payment_sessions,
 
         COUNTIF(
-            product_views > 0
-            AND add_to_cart_events > 0
-            AND checkout_events > 0
-            AND shipping_events > 0
-            AND payment_events > 0
-            AND purchase_events > 0
+            purchase_events > 0
         ) AS purchase_sessions
 
     FROM
@@ -68,37 +52,42 @@ WITH funnel_counts AS (
 
 funnel AS (
 
-    SELECT 1 AS stage_order, 'Session' AS stage, sessions
+    SELECT
+        1 AS stage_order,
+        'Session' AS stage,
+        sessions
     FROM funnel_counts
 
     UNION ALL
 
-    SELECT 2, 'Product View', product_view_sessions
+    SELECT
+        2,
+        'Product View',
+        product_view_sessions
     FROM funnel_counts
 
     UNION ALL
 
-    SELECT 3, 'Add to Cart', add_to_cart_sessions
+    SELECT
+        3,
+        'Begin Checkout',
+        checkout_sessions
     FROM funnel_counts
 
     UNION ALL
 
-    SELECT 4, 'Begin Checkout', checkout_sessions
+    SELECT
+        4,
+        'Payment Info',
+        payment_sessions
     FROM funnel_counts
 
     UNION ALL
 
-    SELECT 5, 'Shipping Info', shipping_sessions
-    FROM funnel_counts
-
-    UNION ALL
-
-    SELECT 6, 'Payment Info', payment_sessions
-    FROM funnel_counts
-
-    UNION ALL
-
-    SELECT 7, 'Purchase', purchase_sessions
+    SELECT
+        5,
+        'Purchase',
+        purchase_sessions
     FROM funnel_counts
 ),
 
