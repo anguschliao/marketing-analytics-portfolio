@@ -93,7 +93,7 @@ The materialized table contains:
 
 | Field | Description |
 |---|---|
-| `engaged_session` | 1 when GA4 flags the session as engaged |
+| `engaged_session` | 1 when `session_engaged = '1'` on an event other than `first_visit`, `first_open`, or `session_start` |
 | `engagement_seconds` | Total recorded engagement time in seconds |
 | `page_views` | Number of page view events in the session |
 
@@ -141,7 +141,7 @@ The materialized table contains:
 |---|---|
 | Users | Distinct `user_pseudo_id` |
 | Sessions | Distinct `user_pseudo_id + ga_session_id` |
-| Engaged Sessions | Sessions where `session_engaged = 1` on at least one event |
+| Engaged Sessions | Sessions where `session_engaged = '1'` on at least one event excluding `first_visit`, `first_open`, and `session_start` |
 | Engagement Rate | Engaged Sessions / Sessions |
 | Product Views | `view_item` events |
 | Add to Cart | `add_to_cart` events |
@@ -156,33 +156,17 @@ The materialized table contains:
 
 ## Ecommerce Funnel
 
-The primary customer journey is represented as:
+The primary business funnel is:
 
 ```text
-Users
-  ↓
-Sessions
-  ↓
-Engaged Sessions
-  ↓
-Product Views
-  ↓
-Add to Cart
-  ↓
-Begin Checkout
-  ↓
-Shipping Information
-  ↓
-Payment Information
-  ↓
-Purchase
-  ↓
-Revenue
+Session → Product View → Begin Checkout → Payment Info → Purchase
 ```
 
 The sample dataset does not contain a meaningful `view_cart` event, so cart viewing is not included as a separate funnel stage.
 
-Funnel conversion rates will be calculated using session- or user-level progression rather than dividing raw event counts, since users can generate multiple instances of the same event.
+Add-to-cart events are absent before November 16, 2020 and remain incomplete afterward. Add to Cart is retained as a diagnostic event but excluded from the primary business funnel; its coverage does not support reliable cart-abandonment conclusions.
+
+Funnel stages measure observed event participation within a session, rather than raw event counts. They do not enforce chronological order or require every preceding stage to be recorded. The primary purchase KPI includes **all purchasing sessions**, not only sessions containing a complete recorded event path.
 
 ---
 
@@ -211,21 +195,31 @@ These differences demonstrate why `session_start` event counts alone are not use
 
 ## Engagement Definition
 
-An engaged session is defined as a derived session where at least one event contains:
+The canonical `engaged_session` flag is 1 when at least one event in the derived session meets both conditions:
 
 ```text
-session_engaged = 1
+session_engaged = '1'
+event_name NOT IN ('first_visit', 'first_open', 'session_start')
 ```
 
-The GA4-provided engagement classification is retained rather than attempting to reconstruct engagement from `engagement_time_msec`.
+This uses the GA4 `session_engaged` parameter while preventing system/special events from artificially establishing engagement. The excluded event types remain in the underlying data for other session metrics. Engagement time is a separate diagnostic, not a replacement definition. This project-specific measure is not claimed to exactly reproduce the GA4 UI engaged-session metric.
 
 ### Engagement Validation
 
-- Sessions: **360,129**
-- Engaged sessions: **320,096**
-- Engagement rate: **88.88%**
+Raw event QA found that `first_visit` events with `session_engaged` populated were effectively always marked engaged. Under the original any-event `MAX` logic, first sessions therefore appeared approximately **99.9%** engaged.
 
-Alternative engagement indicators were investigated and did not perfectly agree with `session_engaged`, reinforcing the decision to retain GA4's session engagement flag as the canonical definition.
+After excluding the three event types from establishing the flag:
+
+- First-session engagement is approximately **70.9%**.
+- Overall canonical engagement is approximately **67.2%** across **360,129 sessions**.
+
+Session numbering and the New/Returning classification are unchanged. The investigation is documented in [customer-type engagement QA](sql/36_customer_type_engagement_qa.sql) and [raw event engagement QA](sql/37_session_engagement_event_qa.sql).
+
+### December 29 Measurement Break
+
+Daily QA identified a structural measurement break beginning around **December 29, 2020**. The share of sessions with exactly one page view collapsed while exactly-two-page-view sessions increased sharply. Canonical engagement rose at the same time, while 10-second engagement and `user_engagement` event coverage remained relatively stable.
+
+Engagement levels spanning this boundary should not be interpreted as directly comparable behavioral trends. The technical cause has not been established. Supporting diagnostics are [daily engagement break QA](sql/38_engagement_break_qa.sql) and [page-view distribution QA](sql/39_page_view_break_qa.sql).
 
 ---
 
@@ -320,8 +314,7 @@ The final enriched session table reconciles to the original event-level ecommerc
 |---|---:|
 | Sessions | 360,129 |
 | Users | 270,154 |
-| Engaged Sessions | 320,096 |
-| Engagement Rate | 88.88% |
+| Engagement Rate | Approximately 67.2% under the corrected canonical definition |
 | Product View Events | 386,068 |
 | Add-to-Cart Events | 58,543 |
 | Checkout Events | 38,757 |
@@ -341,15 +334,17 @@ Several limitations and anomalies were identified during validation:
 - The dataset is a public, obfuscated GA4 sample and should not be treated as pristine production data.
 - **5,272** derived sessions do not contain a `session_start` event.
 - **105** derived sessions contain multiple `session_start` events.
-- GA4 engagement indicators do not perfectly agree across all sessions.
+- Canonical engagement excludes `first_visit`, `first_open`, and `session_start` from establishing the flag; alternative engagement indicators remain separate diagnostics.
+- The December 29 measurement break limits direct engagement comparisons across the boundary.
+- Add-to-cart events are absent before November 16 and remain incomplete afterward; Add to Cart is diagnostic only and excluded from the primary funnel.
 - `add_to_cart` contains an unrealistic aggregate `total_item_quantity`, so that field is not used for funnel measurement.
 - Purchase events do not always contain usable transaction IDs.
 - Some purchase events have zero or missing recorded purchase revenue.
-- Revenue becomes sparse near the end of the sample period despite continued purchase activity.
+- Recorded revenue deteriorates sharply from approximately **January 26–31, 2021**, despite continued purchase events. Revenue-based conclusions for this period should be treated cautiously; the cause has not been established.
 - GCLID parameter keys remain available, while the underlying GCLID values are obfuscated.
 - Approximately **29.83%** of sessions remain unattributed after reconstruction rather than assigning unsupported acquisition sources.
 
-These issues are retained and documented rather than silently corrected.
+These validation findings guide metric selection and interpretation. Observed data is retained, and measurement limitations are documented as analytical governance decisions.
 
 ---
 

@@ -2,6 +2,7 @@ WITH events AS (
 
     SELECT
         user_pseudo_id,
+        event_name,
 
         (
             SELECT value.int_value
@@ -41,11 +42,23 @@ sessions AS (
         user_pseudo_id,
         ga_session_id,
 
+        -- Match the canonical engaged_session definition in 05_session_base.sql.
+        -- Exclude these events only from establishing this flag.
         MAX(
-            CASE WHEN session_engaged = '1'
-            THEN 1 ELSE 0 END
+            CASE
+                WHEN event_name NOT IN (
+                    'first_visit',
+                    'first_open',
+                    'session_start'
+                )
+                AND session_engaged = '1'
+                THEN 1
+                ELSE 0
+            END
         ) AS session_engaged_flag,
 
+        -- Raw diagnostic comparator; engagement time also retains all events.
+        -- Disagreements compare the corrected canonical flag to this raw flag.
         MAX(
             CASE WHEN engaged_session_event = 1
             THEN 1 ELSE 0 END

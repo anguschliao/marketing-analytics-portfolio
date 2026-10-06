@@ -188,9 +188,18 @@ sessions AS (
         -- Engagement
         -- ----------------------------------------------------
 
+        -- first_visit flags inflate first-session engagement in this export.
+        -- Keep all events, but exclude first_visit, first_open, and
+        -- session_start from establishing engaged_session only.
         MAX(
             CASE
-                WHEN session_engaged = '1' THEN 1
+                WHEN event_name NOT IN (
+                    'first_visit',
+                    'first_open',
+                    'session_start'
+                )
+                AND session_engaged = '1'
+                THEN 1
                 ELSE 0
             END
         ) AS engaged_session,

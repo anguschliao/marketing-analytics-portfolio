@@ -38,9 +38,17 @@ sessions AS (
         user_pseudo_id,
         ga_session_id,
 
+        -- Match the canonical engaged_session definition in 05_session_base.sql.
+        -- These events remain available for all other session metrics.
         MAX(
             CASE
-                WHEN session_engaged = '1' THEN 1
+                WHEN event_name NOT IN (
+                    'first_visit',
+                    'first_open',
+                    'session_start'
+                )
+                AND session_engaged = '1'
+                THEN 1
                 ELSE 0
             END
         ) AS engaged_session,
