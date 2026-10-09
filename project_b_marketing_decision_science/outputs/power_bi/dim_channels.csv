@@ -1,0 +1,6 @@
+channel,channel_name,display_order
+tv_spend,TV,1
+ooh_spend,OOH,2
+print_spend,Print,3
+facebook_spend,Facebook,4
+search_spend,Search,5
