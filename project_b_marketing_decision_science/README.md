@@ -181,22 +181,40 @@ The Aggressive scenario showed greater sensitivity, particularly in the allocati
 
 This demonstrated directional consistency in several recommendations while highlighting uncertainty in the precise financial impact.
 
+
 ## 6. Power BI Reporting
 
-The project includes a validated reporting layer designed for interactive Power BI analysis.
+The project includes a four-page interactive Power BI dashboard designed to translate marketing mix modeling and budget optimization results into actionable decision support.
 
-| Reporting Dataset | Purpose |
-|---|---|
-| `fact_budget_scenarios.csv` | Compare baseline and optimized revenue |
-| `fact_channel_allocations.csv` | Examine channel budget changes |
-| `fact_marginal_roas.csv` | Compare marginal returns |
-| `fact_response_curves.csv` | Visualize nonlinear advertising response |
-| `fact_model_sensitivity.csv` | Evaluate model-specification sensitivity |
-| `dim_channels.csv` | Standardize channel labels and sorting |
+### Executive Overview
+- Fixed $2.97M annual marketing budget and modeled revenue opportunity.
+- Interactive Conservative, Moderate, and Aggressive scenario selection.
+- Baseline versus optimized channel spending.
+- Dynamic executive recommendations and financial insights.
 
-These tables support executive reporting, scenario comparison, channel analysis, and marketing investment planning.
+### Channel Allocation
+- Channel-level budget allocations and reallocation amounts.
+- Comparison of baseline and optimized investment.
+- Dynamic budget concentration insights.
 
-The Power BI dashboard is a separate presentation deliverable.
+### Media Effectiveness
+- Modeled marginal ROAS across five advertising channels.
+- Nonlinear revenue-response curves.
+- Interactive analysis of diminishing marginal returns.
+
+### Model Sensitivity
+- Original versus holiday-aware MMM comparisons.
+- Sensitivity of modeled revenue uplift and channel allocations.
+- Interpretation of model uncertainty and limitations.
+
+### Dashboard Files
+
+[Open Power BI Dashboard](Project_B_Marketing_Decision_Science.pbix)
+
+The dashboard uses six validated reporting tables located in `outputs/power_bi/`.
+
+All modeled revenue improvements are retrospective scenario estimates rather than experimentally validated incremental revenue.
+
 
 ## 7. Project Structure
 
@@ -262,6 +280,22 @@ The previously examined final 42 weeks were excluded from subsequent model optim
 Reproduction requires the original Meta Robyn simulated dataset, the Python dependencies, and the project scripts.
 
 Saved optimization configurations and generated outputs are maintained in the `outputs/` directory.
+
+
+### Environment Setup
+
+From the repository root:
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r project_b_marketing_decision_science/requirements.txt
+```
+
+The project-specific requirements file contains the dependencies needed for the principal analytical workflows.
+
+Saved model optimization results and reporting outputs are included in the repository. Reviewing the completed results does not require rerunning the computationally expensive Optuna studies.
+
 
 ## 9. Limitations
 
