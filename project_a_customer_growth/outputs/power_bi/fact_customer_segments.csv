@@ -1,0 +1,76 @@
+section_order,metric_group,segment,row_order,metric,value
+1,OVERALL RETENTION,All Customers,1,customers,270154.0
+1,OVERALL RETENTION,All Customers,2,customers_with_repeat_session,47364.0
+1,OVERALL RETENTION,All Customers,3,repeat_session_rate,0.17532222362060157
+1,OVERALL RETENTION,All Customers,4,customers_returning_later_day,29329.0
+1,OVERALL RETENTION,All Customers,5,later_day_return_rate,0.10856400423462173
+1,OVERALL RETENTION,Purchasing Customers,6,purchasing_customers,4419.0
+1,OVERALL RETENTION,Purchasing Customers,7,repeat_purchasers,326.0
+1,OVERALL RETENTION,Purchasing Customers,8,repeat_purchaser_rate,0.07377234668477031
+2,CUSTOMER SEGMENTS,Repeat Purchaser,11,customers,326.0
+2,CUSTOMER SEGMENTS,Repeat Purchaser,12,customer_share,0.0012067191305699713
+2,CUSTOMER SEGMENTS,Repeat Purchaser,13,sessions,2043.0
+2,CUSTOMER SEGMENTS,Repeat Purchaser,14,purchasing_sessions,716.0
+2,CUSTOMER SEGMENTS,Repeat Purchaser,15,revenue,60650.0
+2,CUSTOMER SEGMENTS,Repeat Purchaser,16,revenue_share,0.16746510568387338
+2,CUSTOMER SEGMENTS,Repeat Purchaser,17,avg_sessions_per_customer,6.266871165644167
+2,CUSTOMER SEGMENTS,Repeat Purchaser,18,avg_revenue_per_customer,186.04294478527598
+2,CUSTOMER SEGMENTS,One-Time Purchaser,21,customers,4093.0
+2,CUSTOMER SEGMENTS,One-Time Purchaser,22,customer_share,0.015150617795775742
+2,CUSTOMER SEGMENTS,One-Time Purchaser,23,sessions,13717.0
+2,CUSTOMER SEGMENTS,One-Time Purchaser,24,purchasing_sessions,4132.0
+2,CUSTOMER SEGMENTS,One-Time Purchaser,25,revenue,301515.0
+2,CUSTOMER SEGMENTS,One-Time Purchaser,26,revenue_share,0.8325348943161266
+2,CUSTOMER SEGMENTS,One-Time Purchaser,27,avg_sessions_per_customer,3.351331541656477
+2,CUSTOMER SEGMENTS,One-Time Purchaser,28,avg_revenue_per_customer,73.66601514781317
+2,CUSTOMER SEGMENTS,Returning Non-Purchaser,31,customers,26457.0
+2,CUSTOMER SEGMENTS,Returning Non-Purchaser,32,customer_share,0.09793303078984579
+2,CUSTOMER SEGMENTS,Returning Non-Purchaser,33,sessions,84833.0
+2,CUSTOMER SEGMENTS,Returning Non-Purchaser,34,purchasing_sessions,0.0
+2,CUSTOMER SEGMENTS,Returning Non-Purchaser,35,revenue,0.0
+2,CUSTOMER SEGMENTS,Returning Non-Purchaser,36,revenue_share,0.0
+2,CUSTOMER SEGMENTS,Returning Non-Purchaser,37,avg_sessions_per_customer,3.206448198964337
+2,CUSTOMER SEGMENTS,Returning Non-Purchaser,38,avg_revenue_per_customer,0.0
+2,CUSTOMER SEGMENTS,Single-Day Non-Purchaser,41,customers,239278.0
+2,CUSTOMER SEGMENTS,Single-Day Non-Purchaser,42,customer_share,0.8857096322838085
+2,CUSTOMER SEGMENTS,Single-Day Non-Purchaser,43,sessions,259536.0
+2,CUSTOMER SEGMENTS,Single-Day Non-Purchaser,44,purchasing_sessions,0.0
+2,CUSTOMER SEGMENTS,Single-Day Non-Purchaser,45,revenue,0.0
+2,CUSTOMER SEGMENTS,Single-Day Non-Purchaser,46,revenue_share,0.0
+2,CUSTOMER SEGMENTS,Single-Day Non-Purchaser,47,avg_sessions_per_customer,1.0846630279423957
+2,CUSTOMER SEGMENTS,Single-Day Non-Purchaser,48,avg_revenue_per_customer,0.0
+3,RETURN TIMING,Same day only,1,customers,240825.0
+3,RETURN TIMING,1-7 days,2,customers,18076.0
+3,RETURN TIMING,8-30 days,3,customers,8001.0
+3,RETURN TIMING,31-60 days,4,customers,2566.0
+3,RETURN TIMING,61+ days,5,customers,686.0
+3,RETURN TIMING,Same day only,11,customer_share,0.8914359957653782
+3,RETURN TIMING,1-7 days,12,customer_share,0.06690998467540736
+3,RETURN TIMING,8-30 days,13,customer_share,0.029616440992915154
+3,RETURN TIMING,31-60 days,14,customer_share,0.009498286162707197
+3,RETURN TIMING,61+ days,15,customer_share,0.002539292403592025
+3,RETURN TIMING,Same day only,21,revenue,92719.0
+3,RETURN TIMING,1-7 days,22,revenue,96474.0
+3,RETURN TIMING,8-30 days,23,revenue,110098.0
+3,RETURN TIMING,31-60 days,24,revenue,47919.0
+3,RETURN TIMING,61+ days,25,revenue,14955.0
+4,FIRST PURCHASE TIMING,Purchased first observed day,1,customers,2596.0
+4,FIRST PURCHASE TIMING,Purchased within 1-7 days,2,customers,947.0
+4,FIRST PURCHASE TIMING,Purchased within 8-30 days,3,customers,664.0
+4,FIRST PURCHASE TIMING,Purchased after 30 days,4,customers,212.0
+4,FIRST PURCHASE TIMING,Purchased first observed day,11,purchaser_share,0.5874632269744287
+4,FIRST PURCHASE TIMING,Purchased within 1-7 days,12,purchaser_share,0.21430187825299843
+4,FIRST PURCHASE TIMING,Purchased within 8-30 days,13,purchaser_share,0.1502602398732745
+4,FIRST PURCHASE TIMING,Purchased after 30 days,14,purchaser_share,0.04797465489929848
+4,FIRST PURCHASE TIMING,Purchased first observed day,21,revenue,194501.0
+4,FIRST PURCHASE TIMING,Purchased within 1-7 days,22,revenue,86257.0
+4,FIRST PURCHASE TIMING,Purchased within 8-30 days,23,revenue,66495.0
+4,FIRST PURCHASE TIMING,Purchased after 30 days,24,revenue,14912.0
+5,REPEAT PURCHASE TIMING,1-7 days,1,customers,124.0
+5,REPEAT PURCHASE TIMING,8-30 days,2,customers,137.0
+5,REPEAT PURCHASE TIMING,31-60 days,3,customers,58.0
+5,REPEAT PURCHASE TIMING,61+ days,4,customers,7.0
+5,REPEAT PURCHASE TIMING,1-7 days,11,repeat_purchaser_share,0.3803680981595092
+5,REPEAT PURCHASE TIMING,8-30 days,12,repeat_purchaser_share,0.42024539877300615
+5,REPEAT PURCHASE TIMING,31-60 days,13,repeat_purchaser_share,0.17791411042944785
+5,REPEAT PURCHASE TIMING,61+ days,14,repeat_purchaser_share,0.02147239263803681

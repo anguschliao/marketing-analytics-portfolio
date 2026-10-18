@@ -1,0 +1,4 @@
+retention_window,eligible_purchasers,repeat_purchasers,repeat_purchase_rate
+7 Day,4145,136,0.032810615199034984
+14 Day,3797,180,0.0474058467210956
+30 Day,3421,240,0.0701549254603917
