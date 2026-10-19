@@ -391,47 +391,140 @@ Time-decay attribution will allow recent marketing interactions to receive great
 
 ---
 
+
+## Project Results
+
+The analysis covers 92 days of Google Merchandise Store
+ecommerce activity from November 2020 through January 2021.
+
+| Metric | Result |
+|---|---:|
+| Users | 270,154 |
+| Sessions | 360,129 |
+| Revenue | $362,165 |
+| Session Conversion Rate | 1.35% |
+| Canonical Engagement Rate | 67.2% |
+| Purchasing Sessions | 4,848 |
+
+### Key Business Findings
+
+**Acquisition Performance**
+
+Reconstructing session acquisition using event-level
+traffic-source information and GCLID evidence improved
+paid-search identification.
+
+However, 29.83% of sessions remained unattributed,
+highlighting the importance of marketing data quality.
+
+**Conversion Performance**
+
+Approximately 21.4% of sessions included a product view,
+while only 1.35% included a purchase.
+
+Incomplete funnel instrumentation limits interpretation
+of sequential conversion and abandonment.
+
+**Customer Value**
+
+One-time purchasers generated the majority of observed
+30-day revenue.
+
+Repeat purchasers demonstrated substantially higher
+average revenue per customer, highlighting the potential
+value of customer retention and repeat-purchase strategies.
+
+**Customer Retention**
+
+Fixed-window retention analysis found approximately:
+
+- 7-day return rate: 8.4%
+- 14-day return rate: 9.7%
+- 30-day return rate: 11.8%
+
+These measures include only customers with sufficient
+follow-up time and represent observed return activity,
+not lifetime customer retention.
+
+## Power BI Dashboard
+
+The project includes a three-page interactive Power BI
+dashboard.
+
+### Executive Overview
+
+![Executive Overview](assets/executive_overview.png)
+
+Summarizes revenue, traffic, engagement, conversion,
+and daily ecommerce performance.
+
+### Acquisition & Conversion
+
+![Acquisition and Conversion](assets/acquisition_conversion.png)
+
+Examines acquisition source performance and observed
+ecommerce funnel participation.
+
+### Customer Value & Retention
+
+![Customer Value and Retention](assets/customer_value_retention.png)
+
+Compares standardized 30-day customer value,
+customer segments, fixed-window retention,
+and monthly retention cohorts.
+
+[Open the Power BI Dashboard](Project_A_Customer_Growth_Analytics.pbix)
+
+## Reproducibility
+
+The analysis uses Google's public GA4 ecommerce sample
+dataset in BigQuery.
+
+SQL scripts are available in `sql/`.
+
+The Python reporting export script is located at:
+
+`src/export_power_bi.py`
+
+To regenerate the Power BI reporting datasets,
+configure Google Cloud authentication and run:
+
+```powershell
+python project_a_customer_growth/src/export_power_bi.py
+```
+
+The generated CSV files are stored in `outputs/power_bi/`.
+
+## Analytical Limitations
+
+- The GA4 dataset is anonymized and obfuscated.
+- Approximately 29.83% of sessions remain unattributed.
+- Engagement measurement changed around December 29, 2020.
+- Recorded revenue became unreliable in late January 2021.
+- Funnel events do not establish complete sequential journeys.
+- Retention is limited to the available observation period.
+- Standardized 30-day revenue is not customer lifetime value.
+- Observed acquisition sources do not establish causal attribution.
+
 ## Project Status
 
-### Completed
+**Completed**
 
-```text
-✓ BigQuery connectivity
-✓ GA4 event inventory
-✓ Parameter inventory
-✓ Ecommerce inventory
-✓ Date coverage validation
-✓ Session reconstruction
-✓ Session reconciliation
-✓ Engagement validation
-✓ Acquisition investigation
-✓ Self-referral handling
-✓ GCLID investigation and correction
-✓ First-user acquisition
-✓ Device and geography dimensions
-✓ Canonical session table
-✓ Final metric reconciliation
-✓ BigQuery materialization
-```
+- GA4 session reconstruction and validation
+- Acquisition source reconstruction
+- Ecommerce performance and funnel analysis
+- Customer segmentation
+- Cohort and fixed-window retention analysis
+- Standardized 30-day customer value analysis
+- Three-page Power BI dashboard
+- Reproducible reporting exports
 
-### Next
+## Conclusion
 
-```text
-Customer & Growth Analysis
-        ↓
-Acquisition Performance
-        ↓
-Engagement Analysis
-        ↓
-Conversion Funnel
-        ↓
-Customer Segmentation
-        ↓
-Cohort / Retention Analysis
-        ↓
-Customer Value
-        ↓
-Multi-Touch Attribution
-        ↓
-Power BI Dashboard
-```
+This project demonstrates an end-to-end customer and
+growth analytics workflow, transforming event-level
+GA4 data into validated marketing intelligence.
+
+The analysis connects customer acquisition, engagement,
+conversion, retention, and observed customer value
+while documenting important measurement limitations.
