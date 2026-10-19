@@ -216,6 +216,41 @@ The dashboard uses six validated reporting tables located in `outputs/power_bi/`
 All modeled revenue improvements are retrospective scenario estimates rather than experimentally validated incremental revenue.
 
 
+### Power BI Dashboard Gallery
+
+The four-page dashboard translates marketing mix modeling,
+channel effectiveness, and budget optimization into
+interactive executive decision support.
+
+#### Executive Overview
+
+![Executive Overview](assets/executive_overview.png)
+
+Compare modeled revenue opportunities, budget scenarios,
+and executive recommendations.
+
+#### Channel Allocation
+
+![Channel Allocation](assets/channel_allocation.png)
+
+Explore channel-level spending changes and the distribution
+of marketing investment across optimization scenarios.
+
+#### Media Effectiveness
+
+![Media Effectiveness](assets/media_effectiveness.png)
+
+Evaluate marginal ROAS, nonlinear response curves,
+and diminishing returns across five advertising channels.
+
+#### Model Sensitivity
+
+![Model Sensitivity](assets/model_sensitivity.png)
+
+Compare original and holiday-aware MMM recommendations
+to understand how model specification influences decisions.
+
+
 ## 7. Project Structure
 
 ```text
